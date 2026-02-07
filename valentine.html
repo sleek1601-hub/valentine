@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            background-color: #fff5f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        #container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.6);
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            width: 400px;
+            min-height: 200px;
+            border: 2px solid #ffb6c1;
+        }
+
+        h1 { 
+            color: #d32f2f; 
+            margin-bottom: 30px; 
+            font-size: 2rem;
+        }
+
+        .buttons { 
+            display: flex; 
+            gap: 50px; /* Space between them */
+            justify-content: center;
+            align-items: center;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        #yesBtn { 
+            background-color: #ff4081; 
+            color: white; 
+            box-shadow: 0 4px 10px rgba(255, 64, 129, 0.3);
+            z-index: 11;
+        }
+
+        #noBtn { 
+            background-color: #bdc3c7; 
+            color: white; 
+            position: relative; /* Changed from absolute for the initial layout */
+            transition: all 0.1s ease;
+        }
+
+        .hidden { display: none; }
+
+        /* Falling Hearts Animation */
+        .falling-heart {
+            position: fixed;
+            top: -50px;
+            font-size: 24px;
+            color: #ff4d6d;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear forwards;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        .success-heart {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <div id="ask-section">
+            <h1>Will you be my Valentine? ❤️</h1>
+            <div class="buttons">
+                <button id="yesBtn" onclick="accept()">YES</button>
+                <button id="noBtn" onmouseover="moveButton()" onclick="reject()">No</button>
+            </div>
+        </div>
+
+        <div id="success-section" class="hidden">
+            <span class="success-heart">💖</span>
+            <h1>Thank You for accepting, I love you sooo muchhh</h1>
+        </div>
+    </div>
+
+    <script>
+        function spawnHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('falling-heart');
+            const heartTypes = ['❤️', '💖', '💝', '💕'];
+            heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.opacity = Math.random();
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+
+        let heartSpeed = setInterval(spawnHeart, 300);
+
+        function accept() {
+            document.getElementById('ask-section').classList.add('hidden');
+            document.getElementById('success-section').classList.remove('hidden');
+            clearInterval(heartSpeed);
+            setInterval(spawnHeart, 75);
+        }
+
+        function reject() {
+            alert("Go back and choose yes");
+        }
+
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            
+            // Switch to fixed positioning so it can fly outside the box too
+            btn.style.position = 'fixed';
+            
+            // Generate coordinates excluding the area where the Yes button/container is
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+    </script>
+</body>
+</html>
